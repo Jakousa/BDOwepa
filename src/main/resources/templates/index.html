@@ -26,10 +26,8 @@
             });
 
             function displayTimer(timer) {
-                console.log(timer);
-                console.log(timer.name);
                 var paragraph = document.createElement("p");
-                var textNode = document.createTextNode("(" + timer.name + ")");
+                var textNode = document.createTextNode("(" + timer.name + ") :" + timer.spawnStart);
                 paragraph.appendChild(textNode);
                 document.getElementById("timers").insertBefore(paragraph, document.getElementById("timers").firstChild);
             }

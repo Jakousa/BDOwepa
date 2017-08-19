@@ -1,5 +1,9 @@
 package wad.service;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -9,23 +13,27 @@ import wad.domain.BossTimer;
 @Service
 public class BossTimerService {
 
-    int when = 0;
-    
+    private String time;
+
     @Autowired
     private UrzasArchives urzas;
 
     @Autowired
     private SimpMessagingTemplate template;
 
-    public void sendTimer(BossTimer timer) {
-        this.template.convertAndSend("/index", timer);
+    public void sendTimer(List<BossTimer> timers) {
+        for (BossTimer timer : timers) {
+            this.template.convertAndSend("/index", timer);
+        }
     }
 
-    @Scheduled(fixedDelay = 1000)
+    @Scheduled(fixedDelay = 10000)
     public void updateTimers() {
-        System.out.println("TIMERI KASVAAA " + when);
-        when++;
-        BossTimer timer = urzas.getBossTimer("Now: " + when);
-        sendTimer(timer);
+        DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+        Date now = new Date();
+        time = dateFormat.format(now);
+        List<BossTimer> timers = urzas.getBossTimers(now);
+        sendTimer(timers);
     }
+    
 }
