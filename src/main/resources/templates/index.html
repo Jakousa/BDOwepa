@@ -1,10 +1,46 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
     <head>
-        <title>TODO supply a title</title>
+        <title>BDO webpalvelin</title>
         <meta charset="UTF-8" />
     </head>
     <body>
-        <div>TODO write content</div>
+        <div>TODO: Better timer</div>
+        <div id="timers">
+            <p th:each="timer: ${timers}" th:text="${timer}"></p>
+        </div>
+
+        <script src="//cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.1/sockjs.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+        <script th:inline="javascript">
+            var client = null;
+
+            // messages defined in websocket config
+            client = Stomp.over(new SockJS('/register'));
+            client.connect({}, function (frame) {
+
+                var subscribeTo = '/index';
+                client.subscribe(subscribeTo, function (response) {
+                    displayTimer(JSON.parse(response.body));
+                });
+            });
+
+            function displayTimer(timer) {
+                console.log(timer);
+                console.log(timer.name);
+                var paragraph = document.createElement("p");
+                var textNode = document.createTextNode("(" + timer.name + ")");
+                paragraph.appendChild(textNode);
+                document.getElementById("timers").insertBefore(paragraph, document.getElementById("timers").firstChild);
+            }
+
+
+            // does not work in opera :/ -- this is also triggered
+            // on some old IEs when clicking anchor links
+            window.onbeforeunload = function () {
+                client.disconnect();
+                client.close();
+            }
+        </script>
     </body>
 </html>
