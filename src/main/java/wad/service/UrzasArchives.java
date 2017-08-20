@@ -28,7 +28,6 @@ public class UrzasArchives {
     public UrzasArchives() {
         url = "http://urzasarchives.com/bdo/wbtbdo/wbteu/";
         driver = new HtmlUnitDriver();
-        driver.get(url);
         timers = initialTimes();
     }
 
@@ -73,6 +72,7 @@ public class UrzasArchives {
 
     private List<String> findBossTables() {
         List<String> tables = new ArrayList<>();
+        driver.get(url);
         for (WebElement tbody : driver.findElements(By.xpath("//tbody"))) {
             tables.add(tbody.getText());
         }

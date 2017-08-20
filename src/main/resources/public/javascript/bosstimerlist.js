@@ -17,7 +17,7 @@ function displayTimer(timer) {
     for (var i = 0; i < children.length; i++) {
         var tableChild = children[i];
         if (tableChild.innerHTML.includes(timer.name)) {
-            document.getElementById("timers").children[i] = paragraph;
+            document.getElementById("timers").replaceChild(paragraph, tableChild);
             return;
         }
     }
@@ -27,6 +27,7 @@ function displayTimer(timer) {
 function createTimerText(timer) {
     var timeFromStart = getTimeFrom(timer.spawnStart);
     var timeFromEstimate = getTimeFrom(timer.spawnEstimated);
+    var now = new Date();
     if (timeFromStart.includes("-")) {
         return "(" + timer.name + ") Start time has passed! Estimated to arrive in: " + timeFromEstimate;
     } else {
