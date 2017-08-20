@@ -1,22 +1,18 @@
 package wad.domain;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
 
 public class BossTimer {
 
     private String name;
-    private String spawnStart;
-    private String spawnEstimated;
-    private String lastUpdated;
+    private Date spawnStart;
+    private Date spawnEstimated;
+    private Date lastUpdated;
 
     public BossTimer(String name) {
         this.name = name;
-        DateFormat dateFormat = new SimpleDateFormat("EEE, hh:mm", Locale.ENGLISH);
         Date now = new Date();
-        lastUpdated = dateFormat.format(now);
+        lastUpdated = now;
     }
 
     public String getName() {
@@ -27,29 +23,28 @@ public class BossTimer {
         this.name = name;
     }
 
-    public String getSpawnStart() {
+    public Date getSpawnStart() {
         return spawnStart;
     }
 
-    public void setSpawnStart(String spawnStart) {
+    public void setSpawnStart(Date spawnStart) {
         this.spawnStart = spawnStart;
     }
 
-    public String getSpawnEstimated() {
+    public Date getSpawnEstimated() {
         return spawnEstimated;
     }
 
-    public void setSpawnEstimated(String spawnEstimated) {
+    public void setSpawnEstimated(Date spawnEstimated) {
         this.spawnEstimated = spawnEstimated;
     }
 
-    public String getLastUpdated() {
+    public Date getLastUpdated() {
         return lastUpdated;
     }
 
     public void setLastUpdated(Date lastUpdated) {
-        DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-        this.lastUpdated = dateFormat.format(lastUpdated);
+        this.lastUpdated = lastUpdated;
     }
 
 }

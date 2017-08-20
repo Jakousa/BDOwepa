@@ -11,13 +11,7 @@ client.connect({}, function (frame) {
 
 function displayTimer(timer) {
     var paragraph = document.createElement("p");
-    var textNode = document.createTextNode("No information available");
-    var timeFrom = getTimeFrom(timer.spawnStart);
-    if (timeFrom.includes("-")) {
-        textNode = document.createTextNode("(" + timer.name + ") Start time has passed! Estimated: " + timer.spawnEstimated);
-    } else {
-        textNode = document.createTextNode("(" + timer.name + ") Starting in:" + timeFrom + " Estimated: " + timer.spawnEstimated);
-    }
+    var textNode = document.createTextNode(createTimerText(timer));
     paragraph.appendChild(textNode);
     var children = document.getElementById("timers").children;
     for (var i = 0; i < children.length; i++) {
@@ -30,21 +24,26 @@ function displayTimer(timer) {
     document.getElementById("timers").insertBefore(paragraph, document.getElementById("timers").firstChild);
 }
 
+function createTimerText(timer) {
+    var timeFromStart = getTimeFrom(timer.spawnStart);
+    var timeFromEstimate = getTimeFrom(timer.spawnEstimated);
+    if (timeFromStart.includes("-")) {
+        return "(" + timer.name + ") Start time has passed! Estimated to arrive in: " + timeFromEstimate;
+    } else {
+        return "(" + timer.name + ") Starting in: " + timeFromStart + " Estimated to arrive in: " + timeFromEstimate;
+    }
+}
+
 function getTimeFrom(time) {
     var now = new Date();
-    var hour = /(1?\d):/g.exec(time)[1];
-    var minute = /(\d\d)$/g.exec(time)[1];
-    var hourDifference = hour - now.getHours();
-    if (hourDifference < -8) {
-        hourDifference += 24;
-    }
-    var minuteDifference = minute - now.getMinutes();
-    if (minuteDifference < 0) {
-        minuteDifference += 60;
-        hourDifference -= 1;
-    }
+    var then = new Date(time);
+    var diff = then - now;
+    diff -= 24 * 60 * 60 * 1000;
+    var seconds = diff / 1000;
+    var minutes = seconds / 60;
+    var hours = Math.floor(minutes / 60);
 
-    return hourDifference + ":" + minuteDifference;
+    return hours + ":" + Math.floor(minutes%60);
 }
 
 // does not work in opera :/ -- this is also triggered

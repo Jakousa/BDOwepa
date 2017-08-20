@@ -1,8 +1,5 @@
 package wad.service;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -25,6 +22,10 @@ public class BossTimerService {
         for (BossTimer timer : timers) {
             this.template.convertAndSend("/index", timer);
         }
+    }
+    
+    public List<BossTimer> getTimers() {
+        return urzas.getBossTimers();
     }
 
     @Scheduled(fixedDelay = 10000)

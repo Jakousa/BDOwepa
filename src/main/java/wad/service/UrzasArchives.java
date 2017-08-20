@@ -1,7 +1,5 @@
 package wad.service;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -11,8 +9,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -29,7 +25,7 @@ public class UrzasArchives {
     private WebDriver driver;
     private final String url;
 
-    public UrzasArchives() throws MalformedURLException {
+    public UrzasArchives() {
         url = "http://urzasarchives.com/bdo/wbtbdo/wbteu/";
         driver = new HtmlUnitDriver();
         driver.get(url);
@@ -64,14 +60,19 @@ public class UrzasArchives {
                 break;
             }
         }
-        timer.setSpawnStart(start);
-        timer.setSpawnEstimated(estim);
+        Date now = new Date();
+        Long difference = differenceBetweenNowAnd(start);
+        now.setTime(now.getTime() + difference);
+        timer.setSpawnStart(now);
+        now = new Date();
+        difference = differenceBetweenNowAnd(estim);
+        now.setTime(now.getTime() + difference);
+        timer.setSpawnEstimated(now);
         return timer;
     }
 
     private List<String> findBossTables() {
         List<String> tables = new ArrayList<>();
-        System.out.println("OPENED CONNECTION");
         for (WebElement tbody : driver.findElements(By.xpath("//tbody"))) {
             tables.add(tbody.getText());
         }
@@ -81,16 +82,15 @@ public class UrzasArchives {
     @Scheduled(fixedDelay = 300000)
     public void updateTimers() throws ParseException {
         List<String> tables = findBossTables();
-
+        Date now = new Date();
         for (BossTimer timer : timers) {
-            Long differenceInMinutes = differenceInMinutesBetweenNowAnd(timer.getSpawnEstimated());
-            if (differenceInMinutes < 0) {
+            if (timer.getSpawnEstimated().before(now)) {
                 generateBossTimer(timer, tables);
             }
         }
     }
 
-    private long differenceInMinutesBetweenNowAnd(String time) {
+    private long differenceBetweenNowAnd(String time) {
         DateFormat dateFormat = new SimpleDateFormat("EEE, hh:mm", Locale.ENGLISH);
         Date now = new Date();
         Date then = null;
@@ -101,12 +101,14 @@ public class UrzasArchives {
             Logger.getLogger(UrzasArchives.class.getName()).log(Level.SEVERE, null, ex);
         }
         long diff = then.getTime() - now.getTime();
+        //Magic variable.
+        diff += 13 * 60 * 60 * 1000;
         long diffHours = diff / (60 * 60 * 1000);
         if (diffHours < -(24 * 4)) {
             diff += 7 * 24 * 60 * 60 * 1000;
         }
 
-        return diff / (60 * 1000);
+        return diff;
     }
 
 }
