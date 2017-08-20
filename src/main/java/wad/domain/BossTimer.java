@@ -3,6 +3,7 @@ package wad.domain;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 public class BossTimer {
 
@@ -13,7 +14,7 @@ public class BossTimer {
 
     public BossTimer(String name) {
         this.name = name;
-        DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+        DateFormat dateFormat = new SimpleDateFormat("EEE, hh:mm", Locale.ENGLISH);
         Date now = new Date();
         lastUpdated = dateFormat.format(now);
     }
@@ -46,8 +47,9 @@ public class BossTimer {
         return lastUpdated;
     }
 
-    public void setLastUpdated(String lastUpdated) {
-        this.lastUpdated = lastUpdated;
+    public void setLastUpdated(Date lastUpdated) {
+        DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+        this.lastUpdated = dateFormat.format(lastUpdated);
     }
 
 }

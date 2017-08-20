@@ -29,10 +29,7 @@ public class BossTimerService {
 
     @Scheduled(fixedDelay = 10000)
     public void updateTimers() {
-        DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-        Date now = new Date();
-        time = dateFormat.format(now);
-        List<BossTimer> timers = urzas.getBossTimers(now);
+        List<BossTimer> timers = urzas.getBossTimers();
         sendTimer(timers);
     }
     
