@@ -102,7 +102,7 @@ public class UrzasArchives {
         }
         long diff = then.getTime() - now.getTime();
         //Magic variable.
-        diff += 13 * 60 * 60 * 1000;
+        diff += 10 * 60 * 60 * 1000;
         long diffHours = diff / (60 * 60 * 1000);
         if (diffHours < -(24 * 4)) {
             diff += 7 * 24 * 60 * 60 * 1000;
