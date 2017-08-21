@@ -61,15 +61,12 @@ public class UrzasArchives {
         }
         Date now = new Date();
         DateFormat dateFormat = new SimpleDateFormat("HH:mm");
-        System.out.println("Now: " + dateFormat.format(now));
         Long difference = differenceBetweenNowAnd(start);
         now.setTime(now.getTime() + difference);
-        System.out.println("Start: " + dateFormat.format(now));
         timer.setSpawnStart(now);
         now = new Date();
         difference = differenceBetweenNowAnd(estim);
         now.setTime(now.getTime() + difference);
-        System.out.println("Spawn: " + dateFormat.format(now));
         timer.setSpawnEstimated(now);
         return timer;
     }
