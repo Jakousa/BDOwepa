@@ -54,18 +54,22 @@ public class UrzasArchives {
         String estim = "";
         for (String table : tables) {
             if (table.contains(timer.getName())) {
-                start = StringUtils.substringBetween(table, "Next Spawn: ", " CEST");
-                estim = StringUtils.substringBetween(table, "Est. Spawn: ", " CEST");
+                start = StringUtils.substringBetween(table, "Next Spawn: ", " CEST") + " CEST";
+                estim = StringUtils.substringBetween(table, "Est. Spawn: ", " CEST") + " CEST";
                 break;
             }
         }
         Date now = new Date();
+        DateFormat dateFormat = new SimpleDateFormat("HH:mm");
+        System.out.println("Now: " + dateFormat.format(now));
         Long difference = differenceBetweenNowAnd(start);
         now.setTime(now.getTime() + difference);
+        System.out.println("Start: " + dateFormat.format(now));
         timer.setSpawnStart(now);
         now = new Date();
         difference = differenceBetweenNowAnd(estim);
         now.setTime(now.getTime() + difference);
+        System.out.println("Spawn: " + dateFormat.format(now));
         timer.setSpawnEstimated(now);
         return timer;
     }
@@ -91,7 +95,7 @@ public class UrzasArchives {
     }
 
     private long differenceBetweenNowAnd(String time) {
-        DateFormat dateFormat = new SimpleDateFormat("EEE, hh:mm", Locale.ENGLISH);
+        DateFormat dateFormat = new SimpleDateFormat("EEE, HH:mm z", Locale.ENGLISH);
         Date now = new Date();
         Date then = null;
         try {
@@ -101,13 +105,10 @@ public class UrzasArchives {
             Logger.getLogger(UrzasArchives.class.getName()).log(Level.SEVERE, null, ex);
         }
         long diff = then.getTime() - now.getTime();
-        //Magic variable.
-        diff += 10 * 60 * 60 * 1000;
         long diffHours = diff / (60 * 60 * 1000);
         if (diffHours < -(24 * 4)) {
             diff += 7 * 24 * 60 * 60 * 1000;
         }
-
         return diff;
     }
 
