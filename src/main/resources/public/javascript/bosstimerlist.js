@@ -29,9 +29,9 @@ function createTimerText(timer) {
     var timeFromEstimate = getTimeFrom(timer.spawnEstimated);
     var now = new Date();
     if (timeFromStart.includes("-")) {
-        return "(" + timer.name + ") Start time has passed! Estimated to arrive in: " + timeFromEstimate + " Estimate: " + new Date(timer.spawnEstimated).toTimeString() + " Now: " + now.toTimeString();
+        return "(" + timer.name + ") Start time has passed! Estimated to arrive in: " + timeFromEstimate + "                                     Estimate: " + new Date(timer.spawnEstimated).toTimeString() + " Now: " + now.toTimeString();
     } else {
-        return "(" + timer.name + ") Starting in: " + timeFromStart + " Estimated to arrive in: " + timeFromEstimate + " Estimate: " + new Date(timer.spawnEstimated).toTimeString() + " Now: " + now.toTimeString();
+        return "(" + timer.name + ") Starting in: " + timeFromStart + " Estimated to arrive in: " + timeFromEstimate + "                                     Estimate: " + new Date(timer.spawnEstimated).toTimeString() + " Now: " + now.toTimeString();
     }
 }
 
@@ -39,7 +39,6 @@ function getTimeFrom(time) {
     var now = new Date();
     var then = new Date(time);
     var diff = then - now;
-    diff -= 24 * 60 * 60 * 1000;
     var seconds = diff / 1000;
     var minutes = seconds / 60;
     var hours = Math.floor(minutes / 60);
