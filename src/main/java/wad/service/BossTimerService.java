@@ -28,7 +28,7 @@ public class BossTimerService {
         return urzas.getBossTimers();
     }
 
-    @Scheduled(fixedDelay = 10000)
+    @Scheduled(fixedDelay = 3000)
     public void updateTimers() {
         List<BossTimer> timers = urzas.getBossTimers();
         sendTimer(timers);
