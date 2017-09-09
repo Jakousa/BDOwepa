@@ -28,7 +28,7 @@ public class indexTest extends FluentTest {
     public void openIndex() {
         goTo("http://localhost:" + port + "/index");
 
-        assertTrue(pageSource().contains("TODO"));
+        assertTrue(pageSource().contains("http://urzasarchives.com/bdo/wbtbdo/wbteu/"));
     }
 
 }
