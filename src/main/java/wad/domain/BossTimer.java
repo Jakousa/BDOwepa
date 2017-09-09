@@ -7,12 +7,21 @@ public class BossTimer {
     private String name;
     private Date spawnStart;
     private Date spawnEstimated;
+    private Date lastSpawn;
     private Date lastUpdated;
 
     public BossTimer(String name) {
         this.name = name;
         Date now = new Date();
         lastUpdated = now;
+    }
+
+    public Date getLastSpawn() {
+        return lastSpawn;
+    }
+
+    public void setLastSpawn(Date lastSpawn) {
+        this.lastSpawn = lastSpawn;
     }
 
     public String getName() {

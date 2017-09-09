@@ -52,8 +52,10 @@ public class UrzasArchives {
     private BossTimer generateBossTimer(BossTimer timer, List<String> tables) {
         String start = "";
         String estim = "";
+        String last = "";
         for (String table : tables) {
             if (table.contains(timer.getName())) {
+                last = StringUtils.substringBetween(table, "Last Spawn: ", " CEST") + " CEST";
                 start = StringUtils.substringBetween(table, "Next Spawn: ", " CEST") + " CEST";
                 estim = StringUtils.substringBetween(table, "Est. Spawn: ", " CEST") + " CEST";
                 break;
@@ -68,6 +70,10 @@ public class UrzasArchives {
         difference = differenceBetweenNowAnd(estim);
         now.setTime(now.getTime() + difference);
         timer.setSpawnEstimated(now);
+        now = new Date();
+        difference = differenceBetweenNowAnd(last);
+        now.setTime(now.getTime() + difference);
+        timer.setLastSpawn(now);
         return timer;
     }
 
