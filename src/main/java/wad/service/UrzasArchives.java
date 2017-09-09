@@ -85,9 +85,9 @@ public class UrzasArchives {
         List<String> tables = findBossTables();
         Date now = new Date();
         for (BossTimer timer : timers) {
-            if (timer.getSpawnEstimated().before(now)) {
-                generateBossTimer(timer, tables);
-            }
+            //if (timer.getSpawnEstimated().before(now)) {
+            generateBossTimer(timer, tables);
+            //}
         }
     }
 
