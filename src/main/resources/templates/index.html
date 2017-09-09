@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
     <head>
+        <link rel='stylesheet' href='/webjars/bootstrap/4.0.0-beta/css/bootstrap.min.css'/>
         <title>BDO webpalvelin</title>
         <meta charset="UTF-8" />
     </head>
-    <body>
+    <body style="width: 90%; margin: auto;">
         <div>Thanks to <a href="http://urzasarchives.com/bdo/wbtbdo/wbteu/">Urzas Archives</a> for european timers. I simply offer theirs in a different format. My api @ /api/timers </div>
-        <div id="timers">
-            <p th:each="timer: ${timers}" th:text="${timer.name}"></p>
+        <div class="row" id="timers">
+            <div class="col-6 col-lg-3" th:each="timer: ${timers}" th:text="${timer.name}"></div>
         </div>
 
         <script src="//cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.1/sockjs.min.js"></script>
