@@ -86,7 +86,7 @@ public class UrzasArchives {
         return tables;
     }
 
-    @Scheduled(fixedDelay = 300000)
+    @Scheduled(fixedDelay = 200000)
     public void updateTimers() throws ParseException {
         List<String> tables = findBossTables();
         Date now = new Date();

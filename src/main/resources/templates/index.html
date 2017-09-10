@@ -4,15 +4,27 @@
         <link rel='stylesheet' href='/webjars/bootstrap/4.0.0-beta/css/bootstrap.min.css'/>
         <title>BDO webpalvelin</title>
         <meta charset="UTF-8" />
+
     </head>
     <body style="width: 90%; margin: auto;">
         <div>Thanks to <a href="http://urzasarchives.com/bdo/wbtbdo/wbteu/">Urzas Archives</a> for european timers. I simply offer theirs in a different format. My api @ /api/timers </div>
         <div class="row" id="timers">
-            <div class="col-6 col-lg-3" th:each="timer: ${timers}" th:text="${timer.name}"></div>
+            <div class="col-6 col-lg-3" style="visibility:hidden;" th:each="timer: ${timers}" th:text="${timer.name}"></div>
         </div>
+
 
         <script src="//cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.1/sockjs.min.js"></script>
         <script src="//cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
         <script src="javascript/bosstimerlist.js"></script>
+        <script th:inline="javascript" th:each="timer: ${timers}">
+            /*<![CDATA[*/
+            var timer = {};
+            timer.name = [[${timer.name}]];
+            timer.spawnStart = [[${timer.spawnStart}]];
+            timer.spawnEstimated = [[${timer.spawnEstimated}]];
+            timer.lastSpawn = [[${timer.lastSpawn}]];
+            displayTimer(timer);
+            /*]]>*/
+        </script>
     </body>
 </html>
