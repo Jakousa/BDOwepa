@@ -44,30 +44,38 @@ function createTimerText(timer) {
 }
 
 function createProgressBar(timer) {
-    var percent = makePercentagesFromTime(timer);
+    var percent = makePercentagesFromTime(timer.lastSpawn, timer.spawnStart);
+    var percentToEstimate = makePercentagesFromTime(timer.spawnStart, timer.spawnEstimated);
     var progress = document.createElement("div");
     progress.className = "progress";
     var progressBar = document.createElement("div");
     if (percent >= 99) {
-        progressBar.setAttribute("class", "progress-bar progress-bar-danger");
-    } else if (percent >= 75) {
-        progressBar.setAttribute("class", "progress-bar progress-bar-warning");
+        var progressToEstimate = document.createElement("div")
+        progressToEstimate.setAttribute("class", "progress-bar bg-danger");
+        progressToEstimate.setAttribute("role", "progressbar");
+        progressToEstimate.setAttribute("aria-valuenow", percentToEstimate);
+        progressToEstimate.setAttribute("aria-valuemin", "0");
+        progressToEstimate.setAttribute("aria-valuemax", "100");
+        progressToEstimate.setAttribute("style", "width: " + percentToEstimate + "%");
+        progress.appendChild(progressToEstimate);
+
+        progressBar.setAttribute("class", "progress-bar bg-warning");
     } else {
-        progressBar.setAttribute("class", "progress-bar progress-bar-success");
+        progressBar.setAttribute("class", "progress-bar bg-success");
     }
     progressBar.setAttribute("role", "progressbar");
-    progressBar.setAttribute("aria-valuenow", percent);
+    progressBar.setAttribute("aria-valuenow", (percent - percentToEstimate));
     progressBar.setAttribute("aria-valuemin", "0");
     progressBar.setAttribute("aria-valuemax", "100");
-    progressBar.setAttribute("style", "width: " + percent + "%");
+    progressBar.setAttribute("style", "width: " + (percent - percentToEstimate) + "%");
     progress.appendChild(progressBar);
     return progress;
 }
 
-function makePercentagesFromTime(timer) {
-    var lastTime = new Date(timer.lastSpawn);
+function makePercentagesFromTime(start, end) {
+    var lastTime = new Date(start);
     var now = new Date();
-    var coming = new Date(timer.spawnStart);
+    var coming = new Date(end);
 
     var diff = coming - lastTime;
     var atm = now - lastTime;
@@ -84,6 +92,9 @@ function getTimeFrom(time) {
 
     return hours + ":" + Math.floor(minutes % 60);
 }
+
+client.debug = function (str) {
+};
 
 // does not work in opera :/ -- this is also triggered
 // on some old IEs when clicking anchor links
