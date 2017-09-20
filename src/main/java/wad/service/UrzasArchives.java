@@ -55,7 +55,11 @@ public class UrzasArchives {
         String last = "";
         for (String table : tables) {
             if (table.contains(timer.getName())) {
-                last = StringUtils.substringBetween(table, "Last Spawn: ", " CEST") + " CEST";
+                if (table.contains("Server Maintenance")) {
+                    last = "Wed, 15:00 CEST";
+                } else {
+                    last = StringUtils.substringBetween(table, "Last Spawn: ", " CEST") + " CEST";
+                }
                 start = StringUtils.substringBetween(table, "Next Spawn: ", " CEST") + " CEST";
                 estim = StringUtils.substringBetween(table, "Est. Spawn: ", " CEST") + " CEST";
                 break;
@@ -100,7 +104,7 @@ public class UrzasArchives {
     private long differenceBetweenNowAnd(String time) {
         DateFormat dateFormat = new SimpleDateFormat("EEE, HH:mm z", Locale.ENGLISH);
         Date now = new Date();
-        Date then = null;
+        Date then = new Date();
         try {
             now = dateFormat.parse(dateFormat.format(now));
             then = dateFormat.parse(time);
