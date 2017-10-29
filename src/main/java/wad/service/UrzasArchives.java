@@ -12,7 +12,6 @@ import java.util.logging.Logger;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -58,15 +57,14 @@ public class UrzasArchives {
                 if (table.contains("Server Maintenance")) {
                     last = "Wed, 15:00 CEST";
                 } else {
-                    last = StringUtils.substringBetween(table, "Last Spawn: ", " CEST") + " CEST";
+                    last = StringUtils.substringBetween(table, "Last Spawn: ", "T") + "T"; //CEST or CET
                 }
-                start = StringUtils.substringBetween(table, "Next Spawn: ", " CEST") + " CEST";
-                estim = StringUtils.substringBetween(table, "Est. Spawn: ", " CEST") + " CEST";
+                start = StringUtils.substringBetween(table, "Next Spawn: ", "T") + "T"; // -||-
+                estim = StringUtils.substringBetween(table, "Est. Spawn: ", "T") + "T"; // -||-
                 break;
             }
         }
         Date now = new Date();
-        DateFormat dateFormat = new SimpleDateFormat("HH:mm");
         Long difference = differenceBetweenNowAnd(start);
         now.setTime(now.getTime() + difference);
         timer.setSpawnStart(now);
@@ -84,21 +82,18 @@ public class UrzasArchives {
     private List<String> findBossTables() {
         List<String> tables = new ArrayList<>();
         driver.get(url);
-        for (WebElement tbody : driver.findElements(By.xpath("//tbody"))) {
+        driver.findElements(By.xpath("//tbody")).stream().forEach((tbody) -> {
             tables.add(tbody.getText());
-        }
+        });
         return tables;
     }
 
     @Scheduled(fixedDelay = 200000)
     public void updateTimers() throws ParseException {
         List<String> tables = findBossTables();
-        Date now = new Date();
-        for (BossTimer timer : timers) {
-            //if (timer.getSpawnEstimated().before(now)) {
+        timers.stream().forEach((timer) -> {
             generateBossTimer(timer, tables);
-            //}
-        }
+        });
     }
 
     private long differenceBetweenNowAnd(String time) {
