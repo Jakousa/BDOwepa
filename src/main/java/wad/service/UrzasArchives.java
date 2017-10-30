@@ -9,7 +9,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.apache.commons.lang3.StringUtils;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
@@ -47,6 +48,14 @@ public class UrzasArchives {
     public List<BossTimer> getBossTimers() {
         return timers;
     }
+    
+    private String findBeforeCESTorCET(String where, String from) {
+        Pattern pattern = Pattern.compile(from + "([^']{1,15})(CE[S]*T)");
+        Matcher matcher = pattern.matcher(where);
+        matcher.find();
+        
+        return matcher.group(1) + matcher.group(2);
+    }
 
     private BossTimer generateBossTimer(BossTimer timer, List<String> tables) {
         String start = "";
@@ -57,10 +66,10 @@ public class UrzasArchives {
                 if (table.contains("Server Maintenance")) {
                     last = "Wed, 15:00 CEST";
                 } else {
-                    last = StringUtils.substringBetween(table, "Last Spawn: ", "T") + "T"; //CEST or CET
+                    last = findBeforeCESTorCET(table, "Last Spawn: ");
                 }
-                start = StringUtils.substringBetween(table, "Next Spawn: ", "T") + "T"; // -||-
-                estim = StringUtils.substringBetween(table, "Est. Spawn: ", "T") + "T"; // -||-
+                start = findBeforeCESTorCET(table, "Next Spawn: ");
+                estim = findBeforeCESTorCET(table, "Est. Spawn: ");
                 break;
             }
         }
